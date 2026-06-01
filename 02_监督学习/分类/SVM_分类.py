@@ -1,7 +1,7 @@
 """
 SVM 分类 —— 支持向量机，通过最大间隔超平面分类，核技巧处理非线性问题
 """
-from sklearn.datasets import make_moons, make_circles, load_iris
+from sklearn.datasets import make_classification, make_moons, make_circles, load_iris
 from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.preprocessing import StandardScaler

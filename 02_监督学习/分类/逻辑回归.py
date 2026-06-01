@@ -36,8 +36,8 @@ X_test_m = scaler_m.transform(X_test_m)
 
 # ===================== 2. 二分类 =====================
 # solver: 'lbfgs'(小数据), 'liblinear'(小数据+L1), 'saga'(大数据+弹性网)
-# C 越小正则化越强
-lr_bin = LogisticRegression(C=1.0, penalty="l2", solver="lbfgs", max_iter=1000, random_state=42)
+# C 越小正则化越强；l1_ratio=0 为 L2, l1_ratio=1 为 L1
+lr_bin = LogisticRegression(C=1.0, l1_ratio=0, solver="lbfgs", max_iter=1000, random_state=42)
 lr_bin.fit(X_train_b, y_train_b)
 
 y_pred_b = lr_bin.predict(X_test_b)
@@ -52,8 +52,7 @@ print(f"\n混淆矩阵:\n{confusion_matrix(y_test_b, y_pred_b)}")
 print(f"\n分类报告:\n{classification_report(y_test_b, y_pred_b)}")
 
 # ===================== 3. 多分类（Iris）=====================
-lr_multi = LogisticRegression(C=1.0, penalty="l2", solver="lbfgs",
-                              multi_class="multinomial", max_iter=200, random_state=42)
+lr_multi = LogisticRegression(C=1.0, l1_ratio=0, solver="lbfgs", max_iter=200, random_state=42)
 lr_multi.fit(X_train_m, y_train_m)
 
 y_pred_m = lr_multi.predict(X_test_m)
@@ -67,7 +66,7 @@ print(f"\n分类报告:\n{classification_report(y_test_m, y_pred_m, target_names
 # ===================== 4. 不同正则化对比 =====================
 print("\n=== 正则化强度对比 (C 值) ===")
 for C in [0.01, 0.1, 1.0, 10.0, 100.0]:
-    lr_c = LogisticRegression(C=C, penalty="l2", solver="lbfgs", max_iter=200, random_state=42)
+    lr_c = LogisticRegression(C=C, l1_ratio=0, solver="lbfgs", max_iter=200, random_state=42)
     lr_c.fit(X_train_m, y_train_m)
     train_acc = lr_c.score(X_train_m, y_train_m)
     test_acc = lr_c.score(X_test_m, y_test_m)
@@ -75,7 +74,7 @@ for C in [0.01, 0.1, 1.0, 10.0, 100.0]:
 
 # ===================== 5. L1 正则化（特征选择）=====================
 print("\n=== L1 正则化（稀疏系数）===")
-lr_l1 = LogisticRegression(C=1.0, penalty="l1", solver="liblinear", max_iter=200, random_state=42)
+lr_l1 = LogisticRegression(C=1.0, l1_ratio=1, solver="liblinear", max_iter=200, random_state=42)
 lr_l1.fit(X_train_b, y_train_b)
 n_nonzero = np.count_nonzero(lr_l1.coef_)
 print(f"非零系数个数: {n_nonzero} / {lr_l1.coef_.shape[1]}")

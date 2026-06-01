@@ -69,4 +69,5 @@ for i in range(5):
     print(f"样本{i+1}: 预测={iris.target_names[y_pred[i]]}, 概率=[{probs}], "
           f"真实={iris.target_names[y_test[i]]}")
 
-print(f"\n分类报告:\n{classification_report(y_test, y_pred, target_names=iris.target_names)}")
+y_pred_all = dt_best.predict(X_test)
+print(f"\n分类报告:\n{classification_report(y_test, y_pred_all, target_names=iris.target_names)}")

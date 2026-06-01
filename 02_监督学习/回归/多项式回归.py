@@ -25,7 +25,7 @@ for degree in [1, 2, 3, 4, 5, 10]:
     model.fit(X_train, y_train)
     train_r2 = model.score(X_train, y_train)
     test_r2 = model.score(X_test, y_test)
-    n_features = model.named_steps["poly"].n_features_out_
+    n_features = model.named_steps["poly"].n_output_features_
     # 交叉验证
     cv_scores = cross_val_score(model, X_train, y_train, cv=5, scoring="r2")
     print(f"  degree={degree:>2}: 特征数={n_features:>3}, 训练R²={train_r2:.4f}, "

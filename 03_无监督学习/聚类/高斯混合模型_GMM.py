@@ -76,7 +76,7 @@ for i in range(5):
     print(f"  样本{i+1}: {X_new[i].round(4)} (来自簇 {y_new[i]})")
 
 print("\n=== GMM 要点 ===")
-print("- 与 KMeans 的区别：GMM 是"软聚类"（概率分配），KMeans 是"硬聚类"（确定分配）")
+print("- 与 KMeans 的区别：GMM 是软聚类（概率分配），KMeans 是硬聚类（确定分配）")
 print("- 簇可以是椭圆形（由协方差矩阵控制形状）")
 print("- 用 EM 算法（期望最大化）迭代优化")
 print("- BIC 惩罚模型复杂度，通常选 BIC 最小的 K")

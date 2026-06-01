@@ -59,18 +59,20 @@ for alpha_1 in [1e-6, 1e-4, 1e-2]:
           f"alpha_={br_t.alpha_:.4f}, lambda_={br_t.lambda_:.4f}")
 
 # ===================== 6. 概率预测（多输出）=====================
-# 贝叶斯岭回归也可用于多目标回归
-print("\n=== 多目标回归 ===")
+# BayesianRidge 不支持原生多输出，需用 MultiOutputRegressor 包装
+from sklearn.multioutput import MultiOutputRegressor
+
+print("\n=== 多目标回归（MultiOutputRegressor + BayesianRidge）===")
 y_multi = np.column_stack([y, y * 0.5 + np.random.randn(len(y)) * 5])
-br_multi = BayesianRidge()
+br_multi = MultiOutputRegressor(BayesianRidge())
 br_multi.fit(X_train, y_multi[:len(X_train)])
-y_pred_multi, y_std_multi = br_multi.predict(X_test, return_std=True)
+y_pred_multi = br_multi.predict(X_test)
 print(f"多输出预测形状: {y_pred_multi.shape}")
-print(f"标准差形状: {y_std_multi.shape}")
+print(f"前 5 个样本预测值:\n{y_pred_multi[:5].round(2)}")
 
 print("\n=== 贝叶斯岭回归要点 ===")
 print("- 将权重视为随机变量，用贝叶斯推断估计后验分布")
 print("- 自动学习正则化参数 alpha（权重精度）和 lambda（噪声精度）")
 print("- 提供预测不确定性估计（标准差），适合需要置信区间的场景")
-print("- 系数被"收缩"向 0（类似岭回归），但收缩强度由数据自适应决定")
+print("- 系数被 收缩 向 0（类似岭回归），但收缩强度由数据自适应决定")
 print("- 适合：小样本、需要不确定性估计、不想手动调正则化参数")

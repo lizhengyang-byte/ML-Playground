@@ -89,8 +89,9 @@ class ACAgent:
 
         # Actor 损失：-log_prob × advantage
         actor_loss = -log_prob * advantage
-        # Critic 损失：(target - value)²
-        critic_loss = (target - value.item()) ** 2
+        # Critic 损失：(target - value)²  — value 保持 tensor 参与运算
+        target_t = torch.tensor(target, dtype=torch.float32)
+        critic_loss = (target_t - value) ** 2
 
         loss = actor_loss + 0.5 * critic_loss  # 可调 critic 权重
 

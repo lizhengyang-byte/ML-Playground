@@ -42,9 +42,10 @@ y_pred = lp.predict(X_test)
 acc = accuracy_score(y_test, y_pred)
 print(f"\n=== 标签传播 (LabelPropagation) ===")
 print(f"测试准确率: {acc:.4f}")
-print(f"标签传播矩阵形状: {label_distributions := lp.label_distributions_.shape}")
+label_distributions = lp.label_distributions_
+print(f"标签传播矩阵形状: {label_distributions.shape}")
 print(f"各类别分配概率（前 5 个样本）:")
-print(lp.label_distributions_[:5].round(3))
+print(label_distributions[:5].round(3))
 
 # ===================== 4. 不同参数对比 =====================
 print("\n=== n_neighbors 对比 ===")

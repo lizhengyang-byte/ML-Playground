@@ -65,7 +65,7 @@ if nc_blob >= 2:
     print(f"Silhouette: {silhouette_score(X_b, labels_blob):.4f}")
 
 print("\n=== Mean Shift 要点 ===")
-print("- 核心思想：每个点向其邻域内所有点的均值方向"漂移"，最终收敛到密度峰值")
+print("- 核心思想：每个点向其邻域内所有点的均值方向漂移，最终收敛到密度峰值")
 print("- 无需预设簇数，由数据密度自动决定")
 print("- bandwidth 是唯一关键参数：太大 → 所有点合并；太小 → 每个点一个簇")
 print("- bin_seeding=True 可加速：只在网格点上初始化，减少计算量")

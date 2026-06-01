@@ -32,9 +32,9 @@ knn.fit(X_train[labeled_idx], y_train[labeled_idx])
 print(f"仅用有标签数据 KNN: {knn.score(X_test, y_test):.4f}")
 
 # ===================== 3. Label Spreading =====================
-# alpha: 正则化参数，控制保留多少原始标签信息
-# alpha=0: 完全传播（≈LabelPropagation）
-# alpha=1: 完全保留原始标签（不传播）
+# alpha: 正则化参数，控制保留多少原始标签信息 (范围 0 < alpha < 1)
+# alpha→0: 完全传播（≈LabelPropagation）
+# alpha→1: 完全保留原始标签（不传播）
 ls = LabelSpreading(kernel="knn", n_neighbors=7, alpha=0.2, max_iter=1000)
 ls.fit(X_train, y_train_semi)
 
@@ -46,7 +46,7 @@ print(f"迭代次数: {ls.n_iter_}")
 
 # ===================== 4. alpha 参数影响 =====================
 print("\n=== alpha 参数影响 ===")
-for alpha in [0.0, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9, 1.0]:
+for alpha in [0.001, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9, 0.999]:
     ls_a = LabelSpreading(kernel="knn", n_neighbors=7, alpha=alpha, max_iter=1000)
     ls_a.fit(X_train, y_train_semi)
     acc = ls_a.score(X_test, y_test)
@@ -79,7 +79,7 @@ print(classification_report(y_test, y_pred, target_names=iris.target_names))
 
 print("\n=== 标签扩展原理 ===")
 print("Y = (1-α) × Y_propagated + α × Y_initial")
-print("- α 控制"保持原始标签"vs"接受传播标签"的平衡")
+print("- α 控制 保持原始标签 vs 接受传播标签 的平衡")
 print("- α 越小 → 传播越强，类边界越平滑")
 print("- α 越大 → 越保守，接近只用原始标签")
 print("- 比 LabelPropagation 更稳定（不容易出现数值问题）")

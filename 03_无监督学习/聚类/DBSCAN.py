@@ -67,7 +67,7 @@ for ds_name, (X_d, y_d) in datasets.items():
 
 # ===================== 4. eps 距离图 =====================
 print("\n=== eps 选择方法：k-距离图 ===")
-print("对每个点计算到第 k 个最近邻的距离，排序后找"拐点"作为 eps")
+print("对每个点计算到第 k 个最近邻的距离，排序后找拐点作为 eps")
 from sklearn.neighbors import NearestNeighbors
 nn = NearestNeighbors(n_neighbors=5)
 nn.fit(X)
