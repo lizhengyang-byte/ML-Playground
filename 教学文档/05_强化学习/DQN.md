@@ -63,3 +63,44 @@ for episode in range(n_episodes):
 - **Dueling DQN**：将 Q 值分解为 V(s) + A(s,a)
 - **Prioritized Experience Replay**：优先采样 TD 误差大的经验
 - **Rainbow DQN**：融合多种 DQN 变体的集大成者
+﻿## 数学原理
+
+### 1. DQN 的核心思想
+
+**代码对应**：DQN 用神经网络 $Q(s, a; \theta)$ 近似 Q 函数。
+
+Q-Learning 的表格法在状态空间大或连续时不可行。DQN 用深度网络参数化 Q 函数：
+
+$$Q(s, a; \theta) \approx Q^*(s, a)$$
+
+### 2. 损失函数
+
+$$L(\theta) = \mathbb{E}_{(s, a, r, s') \sim \mathcal{D}}\left[\left(r + \gamma\max_{a'}Q(s', a'; \theta^{-}) - Q(s, a; \theta)\right)^2\right]$$
+
+其中 $\theta^{-}$ 为目标网络参数（定期从 $\theta$ 复制），$\mathcal{D}$ 为经验回放缓冲区。
+
+### 3. 经验回放（Experience Replay）
+
+**代码对应**：经验回放打破数据间的时间相关性。
+
+存储转移 $(s, a, r, s')$ 到缓冲区 $\mathcal{D}$，训练时随机采样 mini-batch：
+
+$$\theta \leftarrow \theta - \alpha\nabla_\theta L(\theta)$$
+
+梯度：
+
+$$\nabla_\theta L = \mathbb{E}\left[2(r + \gamma\max_{a'}Q(s', a'; \theta^-) - Q(s, a; \theta))\nabla_\theta Q(s, a; \theta)\right]$$
+
+### 4. 目标网络（Target Network）
+
+直接用 $Q(s', a'; \theta)$ 计算 TD 目标会导致"追逐移动目标"的不稳定。目标网络 $\theta^-$ 定期从 $\theta$ 复制：
+
+$$y = r + \gamma\max_{a'}Q(s', a'; \theta^-)$$
+
+这使训练目标在一定时期内保持稳定。
+
+### 5. $\epsilon$-贪婪探索
+
+$$a = \begin{cases}\arg\max_a Q(s, a; \theta) & \text{with prob } 1-\epsilon \\ \text{random action} & \text{with prob } \epsilon\end{cases}$$
+
+$\epsilon$ 通常从 1.0 线性衰减到 0.01。

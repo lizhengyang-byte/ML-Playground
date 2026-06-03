@@ -41,3 +41,48 @@ self.critic = ...  # 输出状态价值 V(s)
 - **A3C（Asynchronous Advantage Actor-Critic）**：异步并行版本
 - **GAE（Generalized Advantage Estimation）**：平衡偏差和方差的通用优势估计
 - **DDPG**：连续动作空间的 Actor-Critic
+﻿## 数学原理
+
+### 1. Actor-Critic 架构
+
+**代码对应**：Actor-Critic 结合策略梯度（Actor）和值函数（Critic）。
+
+**Actor**（策略网络）：$\pi_\theta(a|s)$，输出动作概率分布
+
+**Critic**（值网络）：$V_\phi(s)$，估计状态值函数
+
+### 2. Actor 的更新
+
+用 **TD 误差** $\delta_t$ 代替蒙特卡洛回报 $G_t$：
+
+$$\delta_t = r_t + \gamma V_\phi(s_{t+1}) - V_\phi(s_t)$$
+
+Actor 更新：
+
+$$\theta \leftarrow \theta + \alpha_\theta\sum_t\nabla_\theta\ln\pi_\theta(a_t|s_t) \cdot \delta_t$$
+
+### 3. Critic 的更新
+
+Critic 通过最小化 TD 误差的平方更新：
+
+$$\phi \leftarrow \phi - \alpha_\phi\nabla_\phi\sum_t\delta_t^2$$
+
+$$\nabla_\phi\delta_t^2 = 2\delta_t\left(-\nabla_\phi V_\phi(s_t)\right)$$
+
+### 4. 优势函数
+
+TD 误差是优势函数 $A(s, a)$ 的无偏估计：
+
+$$A(s_t, a_t) = Q(s_t, a_t) - V(s_t) \approx r_t + \gamma V(s_{t+1}) - V(s_t) = \delta_t$$
+
+$A > 0$：动作比平均好（鼓励），$A < 0$：动作比平均差（抑制）。
+
+### 5. REINFORCE vs Actor-Critic
+
+| 特性 | REINFORCE | Actor-Critic |
+|------|----------|-------------|
+| 回报估计 | 蒙特卡洛 $G_t$ | TD 误差 $\delta_t$ |
+| 偏差 | 无偏 | 有偏（Critic 不完美） |
+| 方差 | 高 | 低 |
+| 更新时机 | 轨迹结束后 | 每步更新 |
+| 收敛速度 | 慢 | 快 |

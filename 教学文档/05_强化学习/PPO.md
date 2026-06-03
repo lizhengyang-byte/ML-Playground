@@ -55,3 +55,52 @@ agent.update(states, actions, old_log_probs, returns, advantages)
 - **PPO-Clip vs PPO-Penalty**：两种 PPO 变体
 - **分布式 PPO**：如 IMPALA、Distributed PPO
 - **Mamba 等替代方案**：状态空间模型能否替代 Transformer+PPO
+﻿## 数学原理
+
+### 1. 重要性采样与策略比
+
+**代码对应**：PPO 通过限制策略更新幅度实现稳定训练。
+
+新策略 $\pi_\theta$ 与旧策略 $\pi_{\theta_{\text{old}}}$ 之间的**策略比**：
+
+$$r_t(\theta) = \frac{\pi_\theta(a_t|s_t)}{\pi_{\theta_{\text{old}}}(a_t|s_t)}$$
+
+用重要性采样，旧策略采集的数据可用于更新新策略：
+
+$$J(\theta) = \mathbb{E}\left[r_t(\theta) \cdot A_t\right]$$
+
+### 2. PPO-Clip 目标函数
+
+**代码对应**：PPO 的核心是裁剪目标函数，限制策略变化幅度。
+
+$$L^{\text{CLIP}}(\theta) = \mathbb{E}\left[\min\left(r_t(\theta)A_t, \text{clip}(r_t(\theta), 1-\epsilon, 1+\epsilon)A_t\right)\right]$$
+
+其中 $\epsilon$ 为裁剪参数（通常 0.1~0.2）。
+
+**直觉**：
+- 当 $A_t > 0$（好动作）：$r_t(\theta)$ 被裁剪到 $[1-\epsilon, 1+\epsilon]$，防止策略变化过大
+- 当 $A_t < 0$（坏动作）：同理，限制策略远离该动作的幅度
+
+### 3. 广义优势估计（GAE）
+
+$$A_t^{\text{GAE}(\gamma, \lambda)} = \sum_{l=0}^{\infty}(\gamma\lambda)^l\delta_{t+l}$$
+
+其中 $\delta_t = r_t + \gamma V(s_{t+1}) - V(s_t)$ 为 TD 误差。
+
+$\lambda \in [0, 1]$ 控制偏差-方差权衡：$\lambda = 0$ 为 TD(0)（低方差高偏差），$\lambda = 1$ 为蒙特卡洛（高方差低偏差）。
+
+### 4. PPO 的完整损失
+
+$$L(\theta) = L^{\text{CLIP}}(\theta) + c_1 L^{\text{VF}}(\theta) - c_2 H(\pi_\theta)$$
+
+- $L^{\text{CLIP}}$：策略损失（裁剪目标）
+- $L^{\text{VF}}$：值函数损失 $(V_\theta(s) - V_{\text{target}})^2$
+- $H(\pi_\theta)$：熵正则化（鼓励探索）
+
+### 5. 为什么 PPO 如此流行
+
+PPO 是 OpenAI 的默认强化学习算法，因为：
+- 实现简单（比 TRPO 不需要二阶优化）
+- 训练稳定（裁剪限制策略变化）
+- 样本效率较高（可多次复用同一批数据）
+- 适用范围广（连续/离散动作空间均可）

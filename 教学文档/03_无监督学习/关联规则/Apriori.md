@@ -63,3 +63,53 @@ rules = association_rules(frequent, metric="lift", min_threshold=1.0)
 - **闭频繁项集**和**最大频繁项集**：压缩频繁项集的表示
 - **多层关联规则**：在商品分类体系的不同层级挖掘规则
 - **时序关联规则**：考虑购买的先后顺序（先买 A 再买 B）
+﻿## 数学原理
+
+### 1. 关联规则的基本概念
+
+**代码对应**：Apriori 算法从事务数据中挖掘频繁项集和关联规则。
+
+设事务数据库 $D = \{T_1, T_2, \ldots, T_N\}$，每个事务 $T_i$ 是项目的集合。
+
+**支持度**（Support）：项集 $X$ 在所有事务中出现的频率：
+
+$$\text{supp}(X) = \frac{|\{T \in D : X \subseteq T\}|}{|D|}$$
+
+**置信度**（Confidence）：规则 $X \Rightarrow Y$ 的条件概率：
+
+$$\text{conf}(X \Rightarrow Y) = P(Y|X) = \frac{\text{supp}(X \cup Y)}{\text{supp}(X)}$$
+
+**提升度**（Lift）：规则的"有趣程度"：
+
+$$\text{lift}(X \Rightarrow Y) = \frac{\text{conf}(X \Rightarrow Y)}{\text{supp}(Y)} = \frac{P(X \cap Y)}{P(X)P(Y)}$$
+
+- $\text{lift} = 1$：$X$ 和 $Y$ 独立
+- $\text{lift} > 1$：正相关
+- $\text{lift} < 1$：负相关
+
+### 2. Apriori 性质（先验性质）
+
+**向下闭包性**（Downward Closure）：如果项集 $X$ 是频繁的（$\text{supp}(X) \geq \text{min\_sup}$），则 $X$ 的所有子集也是频繁的。
+
+逆否命题：如果项集 $X$ 是非频繁的，则 $X$ 的所有超集也是非频繁的。
+
+**代码对应**：Apriori 算法利用此性质**剪枝**——一旦发现某个项集非频繁，就不再扩展它，大幅减少搜索空间。
+
+### 3. Apriori 算法流程
+
+1. **扫描 1**：找出所有频繁 1-项集 $L_1$
+2. **连接**：由 $L_k$ 生成候选 $(k+1)$-项集 $C_{k+1}$
+3. **剪枝**：删除包含非频繁子集的候选
+4. **扫描**：计算 $C_{k+1}$ 中每个候选的支持度
+5. **保留**：支持度 $\geq \text{min\_sup}$ 的候选进入 $L_{k+1}$
+6. 重复直到 $L_{k+1} = \emptyset$
+
+### 4. 关联规则生成
+
+对每个频繁项集 $X$，生成所有非空子集 $Y \subset X$，如果 $\text{conf}(Y \Rightarrow X \setminus Y) \geq \text{min\_conf}$，则输出规则。
+
+### 5. 计算复杂度
+
+Apriori 的瓶颈是**多次数据库扫描**（每轮候选生成后都要扫描数据库计算支持度）。对 $p$ 个不同项目，最坏情况需扫描 $O(2^p)$ 个候选。
+
+FP-Growth 通过 FP-Tree 数据结构避免了候选生成和多次扫描，效率显著更高。

@@ -55,3 +55,65 @@ n_noise = list(labels).count(-1)
 - **HDBSCAN**：层次化 DBSCAN，自动处理不同密度的簇，只需 min_cluster_size 参数
 - **OPTICS**：DBSCAN 的改进，不需要固定 eps，通过可达距离图自动确定聚类
 - **DBSCAN 的噪声点用途**：可作为异常检测的副产品
+﻿## 数学原理
+
+### 1. 核心概念的数学定义
+
+**代码对应**：`DBSCAN(eps=eps, min_samples=min_samples)` 中的两个关键参数。
+
+设 $\varepsilon$ 为邻域半径，$\text{MinPts}$ 为最小样本数：
+
+**$\varepsilon$-邻域**：$N_\varepsilon(\mathbf{x}) = \{\mathbf{x}_i : \|\mathbf{x}_i - \mathbf{x}\| \leq \varepsilon\}$
+
+**核心点**（Core Point）：$|N_\varepsilon(\mathbf{x})| \geq \text{MinPts}$
+
+**边界点**（Border Point）：不是核心点，但在某个核心点的 $\varepsilon$-邻域内
+
+**噪声点**（Noise）：既不是核心点也不是边界点
+
+### 2. DBSCAN 算法流程
+
+1. 对每个未访问的点 $\mathbf{x}$：
+   - 计算 $N_\varepsilon(\mathbf{x})$
+   - 如果 $|N_\varepsilon(\mathbf{x})| < \text{MinPts}$，暂时标记为噪声（后续可能变为边界点）
+   - 如果 $|N_\varepsilon(\mathbf{x})| \geq \text{MinPts}$（核心点）：
+     - 创建新簇 $C$，将 $\mathbf{x}$ 加入
+     - **密度可达扩展**：将 $N_\varepsilon(\mathbf{x})$ 中所有点加入队列
+     - 对队列中每个核心点，将其 $\varepsilon$-邻域中的点也加入簇 $C$
+     - 重复直到没有新点可加入
+
+### 3. 密度连接的数学关系
+
+**直接密度可达**（Directly Density-Reachable）：$\mathbf{x}$ 是核心点，$\mathbf{y} \in N_\varepsilon(\mathbf{x})$
+
+**密度可达**（Density-Reachable）：存在链 $\mathbf{x}_1, \ldots, \mathbf{x}_n$，其中 $\mathbf{x}_{i+1}$ 从 $\mathbf{x}_i$ 直接密度可达
+
+**密度相连**（Density-Connected）：存在 $\mathbf{o}$ 使得 $\mathbf{x}$ 和 $\mathbf{y}$ 都从 $\mathbf{o}$ 密度可达
+
+一个簇 $C$ 满足：
+- $\forall \mathbf{x} \in C, \mathbf{y}$ 密度可达自 $\mathbf{x} \Rightarrow \mathbf{y} \in C$（最大化性）
+- $\forall \mathbf{x}, \mathbf{y} \in C$，$\mathbf{x}$ 和 $\mathbf{y}$ 密度相连（连通性）
+
+### 4. k-距离图选 eps
+
+**代码对应**：代码中使用 `NearestNeighbors(n_neighbors=5)` 计算 k-距离。
+
+对每个点计算到第 $k$ 个最近邻的距离，排序后绘制 k-距离图。**拐点**（elbow）处的距离即为合适的 $\varepsilon$：
+
+- $\varepsilon$ 太小：大部分点成为噪声
+- $\varepsilon$ 太大：所有点合并为一个簇
+- 拐点处：密度变化最显著的边界
+
+### 5. 时间复杂度与空间复杂度
+
+- **朴素实现**：$O(n^2)$（每个点需计算与所有其他点的距离）
+- **使用空间索引**（KD-Tree、Ball Tree）：$O(n\log n)$（低维时有效）
+- **空间复杂度**：$O(n)$ 存储标签和邻域信息
+
+### 6. DBSCAN 的局限性
+
+- **密度不均匀**：如果各簇密度差异大，单一的 $\varepsilon$ 无法同时捕捉所有簇
+- **高维数据**：高维空间中距离趋于相同（维度灾难），$\varepsilon$ 的选择变得困难
+- **参数敏感**：$\varepsilon$ 和 MinPts 的微小变化可能导致结果截然不同
+
+改进算法：HDBSCAN（层次 DBSCAN）自动处理不同密度的簇。

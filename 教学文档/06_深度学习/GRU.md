@@ -26,3 +26,28 @@ output, hn = gru(x)  # 没有单独的细胞状态
 - **LSTM vs GRU**：没有绝对优劣，取决于任务和数据
 - **SRU（Simple Recurrent Unit）**：进一步简化，可并行化
 - **State Space Models**：Mamba 等新架构正在取代 RNN
+﻿## 数学原理
+
+### 1. GRU 的门控机制
+
+**代码对应**：GRU 是 LSTM 的简化版本，合并了细胞状态和隐藏状态。
+
+**重置门**：$\mathbf{r}_t = \sigma(\mathbf{W}_r[\mathbf{h}_{t-1}, \mathbf{x}_t])$
+
+**更新门**：$\mathbf{z}_t = \sigma(\mathbf{W}_z[\mathbf{h}_{t-1}, \mathbf{x}_t])$
+
+**候选隐藏状态**：$\tilde{\mathbf{h}}_t = \tanh(\mathbf{W}_h[\mathbf{r}_t \odot \mathbf{h}_{t-1}, \mathbf{x}_t])$
+
+**隐藏状态更新**：$\mathbf{h}_t = (1 - \mathbf{z}_t) \odot \mathbf{h}_{t-1} + \mathbf{z}_t \odot \tilde{\mathbf{h}}_t$
+
+### 2. GRU vs LSTM
+
+| 特性 | LSTM | GRU |
+|------|------|-----|
+| 门数 | 3（遗忘、输入、输出） | 2（重置、更新） |
+| 状态 | $\mathbf{h}_t$ 和 $\mathbf{c}_t$ 分离 | 只有 $\mathbf{h}_t$ |
+| 参数量 | $4(d_h^2 + d_h d_x + d_h)$ | $3(d_h^2 + d_h d_x + d_h)$ |
+| 训练速度 | 较慢 | 较快（参数少 ~25%） |
+| 长序列 | 通常更好 | 类似或稍差 |
+
+GRU 的更新门 $\mathbf{z}_t$ 同时扮演 LSTM 的遗忘门和输入门的角色：当 $\mathbf{z}_t \approx 0$ 时保留旧状态，当 $\mathbf{z}_t \approx 1$ 时用新候选替换。

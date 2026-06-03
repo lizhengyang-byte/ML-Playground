@@ -48,3 +48,41 @@ loss -= log_prob * G  # 增加高回报动作的概率
 - **加 baseline 的 REINFORCE**：用 V(s) 做 baseline 减少方差，这就引出了 Actor-Critic
 - **Entropy Bonus**：鼓励探索，防止策略过早收敛
 - **VPG（Vanilla Policy Gradient）**：REINFORCE 的通用框架版本
+﻿## 数学原理
+
+### 1. 策略梯度定理
+
+**代码对应**：REINFORCE 直接优化策略 $\pi(a|s; \theta)$。
+
+目标函数：$J(\theta) = \mathbb{E}_{\pi_\theta}\left[\sum_{t=0}^{\infty}\gamma^t r_t\right]$
+
+**策略梯度定理**：
+
+$$\nabla_\theta J(\theta) = \mathbb{E}_{\pi_\theta}\left[\sum_{t=0}^{\infty}\nabla_\theta\ln\pi_\theta(a_t|s_t) \cdot G_t\right]$$
+
+其中 $G_t = \sum_{k=t}^{\infty}\gamma^{k-t}r_k$ 为从时刻 $t$ 开始的**回报**（return）。
+
+### 2. REINFORCE 算法
+
+**蒙特卡洛策略梯度**：用采样轨迹估计期望：
+
+$$\theta \leftarrow \theta + \alpha\sum_{t=0}^{T}\nabla_\theta\ln\pi_\theta(a_t|s_t) \cdot G_t$$
+
+流程：
+1. 用当前策略 $\pi_\theta$ 采样完整轨迹 $\tau = (s_0, a_0, r_0, s_1, a_1, r_1, \ldots)$
+2. 计算每个时刻的回报 $G_t$
+3. 更新 $\theta$
+
+### 3. 基线（Baseline）减小方差
+
+**代码对应**：引入基线 $b(s)$（如状态值函数 $V(s)$）减小方差：
+
+$$\nabla_\theta J(\theta) = \mathbb{E}\left[\nabla_\theta\ln\pi_\theta(a_t|s_t) \cdot (G_t - b(s_t))\right]$$
+
+$b(s)$ 不改变梯度的期望（无偏），但显著减小方差。常用 $b(s) = V(s; \phi)$。
+
+### 4. 优缺点
+
+- **优点**：可处理连续动作空间，策略梯度是无偏的
+- **缺点**：方差大（蒙特卡洛采样），收敛慢
+- **改进**：Actor-Critic 用 TD 误差代替蒙特卡洛回报，减小方差

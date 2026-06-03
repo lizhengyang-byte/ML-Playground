@@ -50,3 +50,51 @@ labels = ms.fit_predict(X)
 - **核密度估计（KDE）**：Mean Shift 的理论基础
 - **Mean Shift vs DBSCAN**：两者都能发现任意形状的簇，但原理不同
 - **并行 Mean Shift**：GPU 加速版本
+﻿## 数学原理
+
+### 1. 核密度估计（KDE）
+
+**代码对应**：`MeanShift(bandwidth=bw)` 中的 bandwidth 参数。
+
+均值漂移基于**核密度估计**。给定数据 $\{\mathbf{x}_1, \ldots, \mathbf{x}_n\}$，密度估计为：
+
+$$\hat{f}(\mathbf{x}) = \frac{1}{n h^p}\sum_{i=1}^{n}K\left(\frac{\mathbf{x} - \mathbf{x}_i}{h}\right)$$
+
+其中 $h$ 为带宽（bandwidth），$K$ 为核函数（通常为高斯核）。
+
+### 2. 均值漂移向量
+
+对密度估计求梯度：
+
+$$\nabla\hat{f}(\mathbf{x}) = \frac{1}{n h^{p+2}}\sum_{i=1}^{n}(\mathbf{x}_i - \mathbf{x})K'\left(\frac{\mathbf{x} - \mathbf{x}_i}{h}\right)$$
+
+均值漂移向量为梯度的归一化方向：
+
+$$\mathbf{m}(\mathbf{x}) = \frac{\sum_{i=1}^{n}\mathbf{x}_i g\left(\frac{\mathbf{x} - \mathbf{x}_i}{h}\right)}{\sum_{i=1}^{n}g\left(\frac{\mathbf{x} - \mathbf{x}_i}{h}\right)} - \mathbf{x}$$
+
+其中 $g(x) = -K'(x)$。$\mathbf{m}(\mathbf{x})$ 指向密度增长最快的方向。
+
+### 3. 算法流程
+
+1. 对每个样本 $\mathbf{x}_i$，计算其均值漂移向量 $\mathbf{m}(\mathbf{x}_i)$
+2. 将 $\mathbf{x}_i$ 移动到 $\mathbf{x}_i + \mathbf{m}(\mathbf{x}_i)$
+3. 重复直到收敛到**模式点**（密度局部最大值）
+4. 收敛到同一模式点的样本归为同一簇
+
+### 4. 带宽选择
+
+带宽 $h$ 是最关键的参数：
+- $h$ 大：密度估计平滑，簇数少（欠拟合）
+- $h$ 小：密度估计粗糙，簇数多（过拟合）
+
+sklearn 提供 `estimate_bandwidth(X, quantile=q)` 自动估计带宽，基于 $q$ 分位数的最近邻距离。
+
+### 5. 与 KMeans 的对比
+
+| 特性 | KMeans | MeanShift |
+|------|--------|-----------|
+| 簇数 | 需预设 $K$ | 自动确定 |
+| 簇形状 | 球形 | 任意形状（取决于带宽） |
+| 优化目标 | 最小化 WCSS | 寻找密度模式 |
+| 复杂度 | $O(nKdT)$ | $O(n^2 T)$ |
+| 参数 | $K$ | bandwidth $h$ |

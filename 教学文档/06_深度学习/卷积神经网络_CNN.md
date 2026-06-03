@@ -35,3 +35,50 @@ Conv2d -> ReLU -> MaxPool -> Conv2d -> ReLU -> MaxPool -> Flatten -> Linear -> O
 - **深度可分离卷积**：MobileNet 的核心，大幅减少参数
 - **空洞卷积**：扩大感受野而不增加参数
 - **注意力机制**：Vision Transformer 是否能取代 CNN
+﻿## 数学原理
+
+### 1. 卷积操作
+
+**代码对应**：`nn.Conv2d(in_channels, out_channels, kernel_size, padding)`。
+
+2D 离散卷积：
+
+$$(\mathbf{f} * \mathbf{g})(i, j) = \sum_m\sum_n f(m, n) \cdot g(i-m, j-n)$$
+
+输出特征图：$O[c', i, j] = \sum_c\sum_m\sum_n W[c', c, m, n] \cdot I[c, i+m, j+n] + b[c']$
+
+### 2. 输出尺寸计算
+
+$$H_{\text{out}} = \left\lfloor\frac{H_{\text{in}} + 2 \cdot \text{padding} - \text{kernel\_size}}{\text{stride}} + 1\right\rfloor$$
+
+**代码对应**：`padding=1, kernel_size=3, stride=1` 时输出尺寸不变。
+
+### 3. 参数共享与局部连接
+
+全连接层参数量：$H \times W \times C \times H' \times W' \times C'$
+
+卷积层参数量：$K \times K \times C_{\text{in}} \times C_{\text{out}}$（与输入尺寸无关）
+
+参数共享使 CNN 对平移具有等变性：如果输入平移，输出也相应平移。
+
+### 4. 池化层
+
+MaxPool：$O[i, j] = \max_{(m,n) \in R_{ij}} I[m, n]$
+
+池化增加平移不变性，降低空间分辨率，减少计算量。
+
+### 5. 感受野
+
+第 $l$ 层神经元的感受野大小递推：
+
+$$RF_l = RF_{l-1} + (k_l - 1) \times \prod_{i=1}^{l-1}s_i$$
+
+深层神经元的感受野覆盖更大区域，能捕捉更全局的特征。
+
+### 6. Dropout
+
+训练时以概率 $p$ 随机将神经元输出置零：
+
+$$h_i' = \begin{cases} 0 & \text{with prob } p \\ h_i / (1-p) & \text{with prob } 1-p \end{cases}$$
+
+Dropup 是一种隐式集成（$2^n$ 个子网络的平均）。

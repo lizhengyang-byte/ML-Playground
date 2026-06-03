@@ -45,3 +45,43 @@ for epoch in range(epochs):
 - **通用近似定理**：单隐层 MLP 可以逼近任意连续函数
 - **Batch Normalization**：加速训练、稳定梯度
 - **Dropout**：正则化手段，随机丢弃神经元
+﻿## 数学原理
+
+### 1. 前向传播
+
+**代码对应**：MLP 由多层全连接层组成。
+
+单层前向传播：$\mathbf{h} = \sigma(\mathbf{W}\mathbf{x} + \mathbf{b})$
+
+多层（$L$ 层）：
+$$\mathbf{h}^{(0)} = \mathbf{x}, \quad \mathbf{h}^{(l)} = \sigma(\mathbf{W}^{(l)}\mathbf{h}^{(l-1)} + \mathbf{b}^{(l)}), \quad \hat{y} = \mathbf{h}^{(L)}$$
+
+常用激活函数：
+- ReLU：$\sigma(z) = \max(0, z)$
+- Sigmoid：$\sigma(z) = 1/(1+e^{-z})$
+- Tanh：$\sigma(z) = (e^z - e^{-z})/(e^z + e^{-z})$
+
+### 2. 反向传播（Backpropagation）
+
+**链式法则**：$\frac{\partial L}{\partial \mathbf{W}^{(l)}} = \frac{\partial L}{\partial \mathbf{h}^{(l)}} \cdot \frac{\partial \mathbf{h}^{(l)}}{\partial \mathbf{W}^{(l)}}$
+
+误差从输出层逐层向前传播：
+$$\boldsymbol{\delta}^{(L)} = \nabla_{\hat{y}}L \odot \sigma'(\mathbf{z}^{(L)})$$
+$$\boldsymbol{\delta}^{(l)} = (\mathbf{W}^{(l+1)T}\boldsymbol{\delta}^{(l+1)}) \odot \sigma'(\mathbf{z}^{(l)})$$
+
+### 3. 梯度下降优化
+
+**SGD**：$\theta \leftarrow \theta - \alpha\nabla_\theta L$
+
+**Adam**：结合动量和自适应学习率：
+$$m_t = \beta_1 m_{t-1} + (1-\beta_1)g_t, \quad v_t = \beta_2 v_{t-1} + (1-\beta_2)g_t^2$$
+$$\hat{m}_t = m_t/(1-\beta_1^t), \quad \hat{v}_t = v_t/(1-\beta_2^t)$$
+$$\theta \leftarrow \theta - \alpha\frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon}$$
+
+### 4. 梯度消失与梯度爆炸
+
+梯度在反向传播中逐层相乘：$\frac{\partial L}{\partial \mathbf{W}^{(1)}} \propto \prod_{l=1}^{L-1}\mathbf{W}^{(l)}\text{diag}(\sigma'(\mathbf{z}^{(l)}))$
+
+- Sigmoid/Tanh 的导数 $\leq 0.25$，连乘后梯度指数衰减（梯度消失）
+- ReLU 的导数为 0 或 1，有效缓解梯度消失
+- Batch Normalization 也帮助稳定梯度

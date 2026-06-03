@@ -61,3 +61,54 @@ X_reduced = svd.fit_transform(X_tfidf)  # 适合稀疏矩阵
 - **NMF（非负矩阵分解）**：要求 U 和 V 非负，结果更可解释
 - **随机化 SVD**：大数据集上的近似 SVD，sklearn.utils.extmath.randomized_svd
 - **图像压缩**：保留前 k 个奇异值重建图像，实现有损压缩
+﻿## 数学原理
+
+### 1. SVD 的数学定义
+
+**代码对应**：sklearn 内部使用 SVD 实现 PCA。
+
+任何 $n \times p$ 矩阵 $\mathbf{X}$ 都可以分解为：
+
+$$\mathbf{X} = \mathbf{U}\mathbf{D}\mathbf{V}^T$$
+
+其中：
+- $\mathbf{U} \in \mathbb{R}^{n \times r}$：左奇异向量（正交矩阵），$\mathbf{U}^T\mathbf{U} = \mathbf{I}$
+- $\mathbf{D} \in \mathbb{R}^{r \times r}$：奇异值对角矩阵，$d_1 \geq d_2 \geq \cdots \geq d_r > 0$
+- $\mathbf{V} \in \mathbb{R}^{p \times r}$：右奇异向量（正交矩阵），$\mathbf{V}^T\mathbf{V} = \mathbf{I}$
+- $r = \text{rank}(\mathbf{X})$
+
+### 2. 与特征值分解的关系
+
+$$\mathbf{X}^T\mathbf{X} = \mathbf{V}\mathbf{D}^2\mathbf{V}^T, \quad \mathbf{X}\mathbf{X}^T = \mathbf{U}\mathbf{D}^2\mathbf{U}^T$$
+
+即 $\mathbf{V}$ 是 $\mathbf{X}^T\mathbf{X}$ 的特征向量，$\mathbf{U}$ 是 $\mathbf{X}\mathbf{X}^T$ 的特征向量，$d_k^2$ 为对应的特征值。
+
+**与 PCA 的联系**：PCA 的协方差矩阵 $\mathbf{\Sigma} = \frac{1}{n-1}\mathbf{X}^T\mathbf{X}$，其特征向量即为 $\mathbf{V}$，特征值 $\lambda_k = d_k^2/(n-1)$。
+
+### 3. 截断 SVD 与低秩近似
+
+**Eckart-Young 定理**：在 Frobenius 范数下，秩 $k$ 的最优近似为截断 SVD：
+
+$$\mathbf{X}_k = \sum_{i=1}^{k}d_i\mathbf{u}_i\mathbf{v}_i^T = \mathbf{U}_k\mathbf{D}_k\mathbf{V}_k^T$$
+
+近似误差：
+
+$$\|\mathbf{X} - \mathbf{X}_k\|_F = \sqrt{\sum_{i=k+1}^{r}d_i^2}$$
+
+信息保留比：
+
+$$\frac{\|\mathbf{X}_k\|_F^2}{\|\mathbf{X}\|_F^2} = \frac{\sum_{i=1}^{k}d_i^2}{\sum_{i=1}^{r}d_i^2}$$
+
+### 4. SVD 在推荐系统中的应用
+
+SVD 是协同过滤的核心算法。用户-物品评分矩阵 $\mathbf{R} \in \mathbb{R}^{m \times n}$ 的 SVD 近似：
+
+$$\hat{R}_{ui} = \boldsymbol{\mu} + b_u + b_i + \mathbf{p}_u^T\mathbf{q}_i$$
+
+其中 $\mathbf{p}_u$ 为用户 $u$ 的隐向量，$\mathbf{q}_i$ 为物品 $i$ 的隐向量。
+
+### 5. 计算复杂度
+
+完整 SVD：$O(\min(n^2p, np^2))$。截断 SVD（只求前 $k$ 个奇异值）：$O(npk)$。
+
+sklearn 的 `TruncatedSVD` 使用随机化算法，适合大规模稀疏矩阵。

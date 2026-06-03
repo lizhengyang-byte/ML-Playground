@@ -68,3 +68,62 @@ _init=10 运行多次取最优
 - **GMM 用于异常检测**：低似然度的点可能是异常值
 - **GMM 用于语音识别**：说话人识别中的经典方法
 - **贝叶斯高斯混合**：BayesianGaussianMixture，自动确定有效簇数
+﻿## 数学原理
+
+### 1. 高斯混合模型的概率框架
+
+**代码对应**：`GaussianMixture(n_components=k)` 训练 GMM。
+
+GMM 假设数据由 $K$ 个高斯分布混合生成：
+
+$$P(\mathbf{x}) = \sum_{k=1}^{K}\pi_k \mathcal{N}(\mathbf{x}|\boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)$$
+
+其中 $\pi_k$ 为混合权重（$\sum_k \pi_k = 1$），$\boldsymbol{\mu}_k$ 和 $\boldsymbol{\Sigma}_k$ 为第 $k$ 个高斯分量的均值和协方差。
+
+### 2. EM 算法求解
+
+**E 步**（Expectation）：计算样本 $i$ 属于分量 $k$ 的**后验概率**（责任度）：
+
+$$\gamma_{ik} = P(z_i = k|\mathbf{x}_i) = \frac{\pi_k \mathcal{N}(\mathbf{x}_i|\boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)}{\sum_{j=1}^{K}\pi_j \mathcal{N}(\mathbf{x}_i|\boldsymbol{\mu}_j, \boldsymbol{\Sigma}_j)}$$
+
+**M 步**（Maximization）：用责任度更新参数：
+
+$$\boldsymbol{\mu}_k^{\text{new}} = \frac{\sum_i \gamma_{ik}\mathbf{x}_i}{\sum_i \gamma_{ik}}, \quad \boldsymbol{\Sigma}_k^{\text{new}} = \frac{\sum_i \gamma_{ik}(\mathbf{x}_i - \boldsymbol{\mu}_k^{\text{new}})(\mathbf{x}_i - \boldsymbol{\mu}_k^{\text{new}})^T}{\sum_i \gamma_{ik}}$$
+
+$$\pi_k^{\text{new}} = \frac{\sum_i \gamma_{ik}}{n}$$
+
+EM 算法保证对数似然单调递增，但只能收敛到局部最优。
+
+### 3. 对数似然
+
+$$\ell(\boldsymbol{\theta}) = \sum_{i=1}^{n}\ln\left[\sum_{k=1}^{K}\pi_k \mathcal{N}(\mathbf{x}_i|\boldsymbol{\mu}_k, \boldsymbol{\Sigma}_k)\right]$$
+
+### 4. 协方差类型
+
+**代码对应**：`covariance_type` 参数（full、tied、diag、spherical）。
+
+| 类型 | $\boldsymbol{\Sigma}_k$ 形状 | 参数数 | 适用场景 |
+|------|---------------------------|--------|---------|
+| full | 每个分量独立完整协方差 | $Kp(p+1)/2$ | 一般情况 |
+| tied | 所有分量共享协方差 | $p(p+1)/2$ | 各簇形状相似 |
+| diag | 对角协方差 | $Kp$ | 特征独立 |
+| spherical | $\sigma_k^2\mathbf{I}$ | $K$ | 球形簇（类似 KMeans） |
+
+### 5. 模型选择：BIC/AIC
+
+**代码对应**：`gmm.bic(X)` 和 `gmm.aic(X)` 用于选择最优 $K$。
+
+$$\text{BIC} = -2\ell(\hat{\boldsymbol{\theta}}) + d\ln n$$
+
+$$\text{AIC} = -2\ell(\hat{\boldsymbol{\theta}}) + 2d$$
+
+其中 $d$ 为参数总数。BIC 和 AIC 越小越好，BIC 对复杂模型惩罚更重。
+
+### 6. GMM vs KMeans
+
+KMeans 是 GMM 的特殊情况：当所有 $\boldsymbol{\Sigma}_k = \sigma^2\mathbf{I}$ 且 $\sigma \to 0$ 时，GMM 退化为 KMeans（硬分配）。
+
+GMM 的优势：
+- **软分配**：给出样本属于各簇的概率（不仅是标签）
+- **椭圆形簇**：通过协方差矩阵捕捉非球形结构
+- **概率模型**：可用 BIC/AIC 选择簇数
