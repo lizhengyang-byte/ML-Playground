@@ -1,4 +1,6 @@
-﻿# LDA 分类：最大间距投影，一举两得的分类与降维
+# LDA 分类：最大间距投影，一举两得的分类与降维
+> 难度标签：初级 | 预计时长：15-25分钟 | 前置知识：无学习经验
+
 
 > 所属模块：02_监督学习/分类 | 源文件：LDA_分类.py | 核心功能：LDA 分类、有监督降维、与 PCA 对比
 
@@ -24,36 +26,36 @@
 
 ### 降维上限 = 类别数 - 1
 
-`python
+```python
 lda = LinearDiscriminantAnalysis(solver="svd")
 lda.fit(X_train, y_train)
 X_train_lda = lda.transform(X_train)
-`
+```
 
 LDA 的投影维度上限是 min(n_features, n_classes - 1)。Iris 有 3 个类别，所以最多投影到 2 维。这意味着对于二分类问题，LDA 只能投影到 1 维。
 
 ### Shrinkage 收缩
 
-`python
+```python
 for shrinkage in [None, "auto", 0.0, 0.1, 0.3, 0.5, 0.7, 1.0]:
     lda_sh = LinearDiscriminantAnalysis(solver="lsqr", shrinkage=shrinkage)
-`
+```
 
 当样本量小而特征多时，协方差矩阵的估计不准确。Shrinkage 将协方差矩阵向对角矩阵收缩，等价于正则化。"auto" 使用 Ledoit-Wolf 公式自动选择收缩系数。
 
 ### LDA vs PCA 的关键差异
 
-`python
+```python
 pca = PCA(n_components=2)
 # PCA：无监督，找方差最大方向
 # LDA：有监督，找最能区分类别方向
-`
+```
 
 PCA 最大化总方差，LDA 最大化类别可分性。如果类别间方差恰好在总方差最大方向上，两者结果相似。但当类别间的差异不是最大方差方向时（如类别差异在低方差子空间中），LDA 优势明显。
 
 ## 使用示例
 
-`python
+```python
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
 # 作为分类器
@@ -63,7 +65,7 @@ print(lda.predict(X_test))
 
 # 作为降维器
 X_reduced = lda.transform(X)  # 降到 n_classes - 1 维
-`
+```
 
 ## 注意事项
 
@@ -80,7 +82,7 @@ X_reduced = lda.transform(X)  # 降到 n_classes - 1 维
 - **Kernel LDA**：用核技巧处理非线性判别问题
 - **LDA 在人脸识别中的应用**："Fisherfaces" 就是 LDA 降维 + 最近邻分类的经典方法
 
-﻿## 数学原理
+## 数学原理
 
 ### 1. LDA 的目标：最大化 Fisher 判别准则
 

@@ -1,4 +1,6 @@
-﻿# Apriori 算法：从购物车中发现隐藏的关联
+# Apriori 算法：从购物车中发现隐藏的关联
+> 难度标签：中级 | 预计时长：15-25分钟 | 前置知识：无学习经验
+
 
 > 所属模块：03_无监督学习/关联规则 | 源文件：Apriori.py | 核心功能：频繁项集挖掘、关联规则生成、支持度/置信度/提升度分析
 
@@ -22,19 +24,19 @@
 
 ### 数据编码
 
-`python
+```python
 te = TransactionEncoder()
 te_array = te.fit(transactions).transform(transactions)
 df = pd.DataFrame(te_array, columns=te.columns_)
-`
+```
 
 TransactionEncoder 把交易列表（每条交易是一个商品列表）转为 one-hot 矩阵：每列是一个商品，每行是一条交易，值为 True/False。这是 Apriori 算法的标准输入格式。
 
 ### 三个核心指标
 
-`python
+```python
 rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=0.6)
-`
+```
 
 - **支持度**（Support）：P(A∩B)，A 和 B 同时出现的概率——规则的"普遍性"
 - **置信度**（Confidence）：P(B|A)，买了 A 也买了 B 的概率——规则的"可靠性"
@@ -44,11 +46,11 @@ rules = association_rules(frequent_itemsets, metric="confidence", min_threshold=
 
 ## 使用示例
 
-`python
+```python
 from mlxtend.frequent_patterns import apriori, association_rules
 frequent = apriori(df, min_support=0.2, use_colnames=True)
 rules = association_rules(frequent, metric="lift", min_threshold=1.0)
-`
+```
 
 ## 注意事项
 
@@ -63,7 +65,7 @@ rules = association_rules(frequent, metric="lift", min_threshold=1.0)
 - **闭频繁项集**和**最大频繁项集**：压缩频繁项集的表示
 - **多层关联规则**：在商品分类体系的不同层级挖掘规则
 - **时序关联规则**：考虑购买的先后顺序（先买 A 再买 B）
-﻿## 数学原理
+## 数学原理
 
 ### 1. 关联规则的基本概念
 

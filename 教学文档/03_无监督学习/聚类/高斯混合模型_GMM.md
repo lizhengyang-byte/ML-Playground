@@ -1,4 +1,6 @@
-﻿# 高斯混合模型 GMM：概率版的 KMeans
+# 高斯混合模型 GMM：概率版的 KMeans
+> 难度标签：中级 | 预计时长：15-25分钟 | 前置知识：无学习经验
+
 
 > 所属模块：03_无监督学习/聚类 | 源文件：高斯混合模型_GMM.py | 核心功能：软聚类、BIC/AIC 选模型、协方差类型对比、生成新样本
 
@@ -17,19 +19,19 @@
 
 ### BIC/AIC 选最优 K
 
-`python
+```python
 for k in range(1, 10):
     gmm_k = GaussianMixture(n_components=k, random_state=42, n_init=10)
     bic_scores.append(gmm_k.bic(X))
-`
+```
 
 BIC（贝叶斯信息准则）和 AIC（赤池信息准则）都在对数似然的基础上惩罚模型复杂度。BIC 惩罚更重，倾向选择更简单的模型。**BIC 最小的 K 通常是好选择**。
 
 ### 四种协方差类型
 
-`python
+```python
 for cov_type in ["full", "tied", "diag", "spherical"]:
-`
+```
 
 - **full**：每个簇有自己的完整协方差矩阵（最灵活，参数最多）
 - **tied**：所有簇共享同一个协方差矩阵
@@ -38,20 +40,20 @@ for cov_type in ["full", "tied", "diag", "spherical"]:
 
 ### 软聚类
 
-`python
+```python
 probs = gmm_final.predict_proba(X)
-`
+```
 
 每个样本得到一个概率向量，表示它属于各个簇的概率。如果某个样本的 [0.45, 0.40, 0.10, 0.05] 意味着它在簇 0 和簇 1 之间"犹豫不决"——这比 KMeans 的硬标签提供了更多信息。
 
 ## 使用示例
 
-`python
+```python
 from sklearn.mixture import GaussianMixture
 gmm = GaussianMixture(n_components=4, covariance_type="full", n_init=10)
 labels = gmm.fit_predict(X)
 probs = gmm.predict_proba(X)
-`
+```
 
 ## 注意事项
 
@@ -68,7 +70,7 @@ _init=10 运行多次取最优
 - **GMM 用于异常检测**：低似然度的点可能是异常值
 - **GMM 用于语音识别**：说话人识别中的经典方法
 - **贝叶斯高斯混合**：BayesianGaussianMixture，自动确定有效簇数
-﻿## 数学原理
+## 数学原理
 
 ### 1. 高斯混合模型的概率框架
 

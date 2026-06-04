@@ -1,4 +1,6 @@
-﻿# AdaBoost：加权投票的 Boosting 先驱
+# AdaBoost：加权投票的 Boosting 先驱
+> 难度标签：中级 | 预计时长：15-25分钟 | 前置知识：无学习经验
+
 
 > 所属模块：07_集成学习 | 源文件：AdaBoost.py | 核心功能：样本权重调整、弱分类器加权组合
 
@@ -26,7 +28,7 @@ ada = AdaBoostClassifier(n_estimators=50, learning_rate=1.0, algorithm="SAMME")
 - **AdaBoost.R2**：回归版本
 - **Gradient Boosting**：更通用的 Boosting 框架
 - **AdaBoost 与 SVM 的联系**：两者都关注"难"样本
-﻿## 数学原理
+## 数学原理
 
 ### 1. AdaBoost 算法概述
 

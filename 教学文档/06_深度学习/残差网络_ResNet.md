@@ -1,4 +1,6 @@
-﻿# ResNet：跳跃连接让网络可以无限深
+# ResNet：跳跃连接让网络可以无限深
+> 难度标签：高级 | 预计时长：15-25分钟 | 前置知识：无学习经验
+
 
 > 所属模块：06_深度学习 | 源文件：残差网络_ResNet.py | 核心功能：残差块、跳跃连接、梯度流通
 
@@ -12,11 +14,11 @@ ResNet（2015）通过**跳跃连接**（skip connection）解决了深层网络
 
 ### 残差块
 
-`python
+```python
 class ResBlock(nn.Module):
     def forward(self, x):
         return F.relu(self.conv2(self.conv1(x)) + x)  # 跳跃连接
-`
+```
 
 输入 x 直接加到卷积输出上——如果卷积学到的是 0（恒等映射），输出就等于输入，不会退化。
 
@@ -31,7 +33,7 @@ class ResBlock(nn.Module):
 - **DenseNet**：所有层互相连接
 - **ResNeXt**：分组卷积 + 残差
 - **EfficientNet**：系统化地缩放网络宽度、深度和分辨率
-﻿## 数学原理
+## 数学原理
 
 ### 1. 深层网络的退化问题
 

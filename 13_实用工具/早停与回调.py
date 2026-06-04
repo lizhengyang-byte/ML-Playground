@@ -26,7 +26,10 @@ try:
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
-    print("PyTorch 未安装，跳过")
+    print("[SKIP] PyTorch 未安装，跳过本示例")
+    import sys; sys.exit(0)
+    HAS_TORCH = False
+    print("PyTorch 未安装,跳过")
 
 if HAS_TORCH:
     class Callback:

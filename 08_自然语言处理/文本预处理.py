@@ -6,9 +6,9 @@ from collections import Counter
 
 # ===================== 1. 示例文本 =====================
 texts = [
-    "机器学习是人工智能的一个重要分支，深度学习是机器学习的子领域。",
+    "机器学习是人工智能的一个重要分支,深度学习是机器学习的子领域。",
     "自然语言处理（NLP）是AI领域中最热门的研究方向之一。",
-    "Python是最好的编程语言，没有之一！",
+    "Python是最好的编程语言,没有之一！",
     "The quick brown fox jumps over the lazy dog.",
     "I am learning natural language processing with Python.",
 ]
@@ -23,7 +23,10 @@ try:
     HAS_JIEBA = True
 except ImportError:
     HAS_JIEBA = False
-    print("\njieba 未安装，使用简单分词示例")
+    print("[SKIP] jieba 未安装，跳过本示例")
+    import sys; sys.exit(0)
+    HAS_JIEBA = False
+    print("\njieba 未安装,使用简单分词示例")
 
 if HAS_JIEBA:
     print("\n=== jieba 中文分词 ===")
@@ -92,11 +95,11 @@ try:
     print(f"  词干提取: {[stemmer.stem(w) for w in words_en]}")
     print(f"  词形还原: {[lemmatizer.lemmatize(w) for w in words_en]}")
 except ImportError:
-    print("  NLTK 未安装，跳过词干提取演示")
+    print("  NLTK 未安装,跳过词干提取演示")
 
 # ===================== 6. 正则清洗 =====================
 print("\n=== 常用正则清洗模式 ===")
-text = "用户 ID:12345 的邮箱 test@email.com，电话 138-0000-1234，金额 ¥100.50"
+text = "用户 ID:12345 的邮箱 test@email.com,电话 138-0000-1234,金额 ¥100.50"
 # 去除邮箱
 no_email = re.sub(r"\S+@\S+", "[邮箱]", text)
 print(f"  去邮箱: {no_email}")
@@ -117,7 +120,7 @@ for text in texts:
 print("\n=== 文本预处理流程总结 ===")
 print("1. 小写化/统一大小写")
 print("2. 去除标点、特殊字符、HTML标签")
-print("3. 分词（中文用 jieba/jieba-fast，英文用空格分割）")
+print("3. 分词（中文用 jieba/jieba-fast,英文用空格分割）")
 print("4. 去停用词（高频无意义词）")
 print("5. 词干提取/词形还原（统一词形）")
 print("6. 去除过短的词（长度<2）")

@@ -1,4 +1,6 @@
-﻿# CatBoost：类别特征的最佳拍档
+# CatBoost：类别特征的最佳拍档
+> 难度标签：中级 | 预计时长：15-25分钟 | 前置知识：无学习经验
+
 
 > 所属模块：07_集成学习 | 源文件：CatBoost.py | 核心功能：Ordered Target Encoding、对称树、原生类别特征
 
@@ -26,7 +28,7 @@ model.fit(X_train, y_train, eval_set=(X_val, y_val), early_stopping_rounds=10)
 - **Ordered Boosting**：减少梯度估计的偏差
 - **CatBoost for ranking**：排序任务的内置支持
 - **三者对比**：XGBoost（稳定）/ LightGBM（快）/ CatBoost（类别特征好）
-﻿## 数学原理
+## 数学原理
 
 ### 1. CatBoost 的核心创新
 

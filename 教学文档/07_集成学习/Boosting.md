@@ -1,4 +1,6 @@
-﻿# Boosting：串行训练、逐步纠错
+# Boosting：串行训练、逐步纠错
+> 难度标签：中级 | 预计时长：15-25分钟 | 前置知识：无学习经验
+
 
 > 所属模块：07_集成学习 | 源文件：Boosting.py | 核心功能：串行集成、残差拟合、偏差降低
 
@@ -26,7 +28,7 @@ gb = GradientBoostingClassifier(n_estimators=100, learning_rate=0.1, max_depth=3
 - **XGBoost/LightGBM/CatBoost**：工业级 Boosting 实现
 - **AdaBoost**：最早的 Boosting 算法
 - **学习率调度**：逐步降低学习率
-﻿## 数学原理
+## 数学原理
 
 ### 1. Boosting 的基本思想
 

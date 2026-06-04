@@ -1,4 +1,6 @@
-﻿# Actor-Critic：策略梯度与价值函数的联姻
+# Actor-Critic：策略梯度与价值函数的联姻
+> 难度标签：高级 | 预计时长：20-30分钟 | 前置知识：无学习经验
+
 
 > 所属模块：05_强化学习 | 源文件：Actor_Critic.py | 核心功能：双网络架构、TD 更新、优势函数、共享特征
 
@@ -14,18 +16,18 @@ REINFORCE 用蒙特卡洛回报 G_t 更新，方差大。Actor-Critic 用 TD 误
 
 ### 优势函数
 
-`python
+```python
 advantage = reward + gamma * next_value - value  # TD 误差
-`
+```
 
 优势函数 A(s,a) = Q(s,a) - V(s) 衡量"这个动作比平均水平好多少"。正优势增加概率，负优势降低概率。
 
 ### 双头网络
 
-`python
+```python
 self.actor = ...   # 输出动作概率
 self.critic = ...  # 输出状态价值 V(s)
-`
+```
 
 共享底层特征提取，减少参数量。
 
@@ -41,7 +43,7 @@ self.critic = ...  # 输出状态价值 V(s)
 - **A3C（Asynchronous Advantage Actor-Critic）**：异步并行版本
 - **GAE（Generalized Advantage Estimation）**：平衡偏差和方差的通用优势估计
 - **DDPG**：连续动作空间的 Actor-Critic
-﻿## 数学原理
+## 数学原理
 
 ### 1. Actor-Critic 架构
 

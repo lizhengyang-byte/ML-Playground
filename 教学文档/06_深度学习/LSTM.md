@@ -1,4 +1,6 @@
-﻿# LSTM：解决长期依赖的门控机制
+# LSTM：解决长期依赖的门控机制
+> 难度标签：高级 | 预计时长：15-25分钟 | 前置知识：无学习经验
+
 
 > 所属模块：06_深度学习 | 源文件：LSTM.py | 核心功能：遗忘门/输入门/输出门、细胞状态、长距离依赖
 
@@ -12,18 +14,18 @@ LSTM（Long Short-Term Memory）是 RNN 最成功的改进版本。它引入了*
 
 ### LSTM 单元
 
-`python
+```python
 lstm = nn.LSTM(input_size=10, hidden_size=20, num_layers=2, batch_first=True)
 output, (hn, cn) = lstm(x)  # cn 是细胞状态
-`
+```
 
 ### 门控机制
 
-`python
+```python
 f_t = sigmoid(W_f @ [h_{t-1}, x_t])  # 遗忘门：丢多少旧信息
 i_t = sigmoid(W_i @ [h_{t-1}, x_t])  # 输入门：加多少新信息
 o_t = sigmoid(W_o @ [h_{t-1}, x_t])  # 输出门：输出什么
-`
+```
 
 ## 注意事项
 
@@ -36,7 +38,7 @@ o_t = sigmoid(W_o @ [h_{t-1}, x_t])  # 输出门：输出什么
 - **GRU**：LSTM 的简化版，2 个门，参数更少
 - **Peephole LSTM**：让门也能看到细胞状态
 - **Transformer**：完全抛弃循环结构，用自注意力替代
-﻿## 数学原理
+## 数学原理
 
 ### 1. LSTM 的门控机制
 

@@ -1,4 +1,6 @@
-﻿# LSTM 时间序列预测：深度学习版
+# LSTM 时间序列预测：深度学习版
+> 难度标签：中级 | 预计时长：10-20分钟 | 前置知识：无学习经验
+
 
 > 所属模块：10_时间序列 | 源文件：LSTM_时间序列.py | 核心功能：序列窗口化、LSTM 模型、滚动预测
 
@@ -25,7 +27,7 @@ model = nn.LSTM(input_size=1, hidden_size=50, num_layers=2)
 - **Transformer for Time Series**：时序 Transformer
 - **Temporal Fusion Transformer**：Google 的多步预测模型
 - **时序特征工程**：滞后特征、滚动统计
-﻿## 数学原理
+## 数学原理
 
 ### 1. LSTM 的门控机制
 

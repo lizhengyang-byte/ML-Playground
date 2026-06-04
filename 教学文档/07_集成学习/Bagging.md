@@ -1,4 +1,6 @@
-﻿# Bagging：并行训练、投票决策
+# Bagging：并行训练、投票决策
+> 难度标签：中级 | 预计时长：15-25分钟 | 前置知识：无学习经验
+
 
 > 所属模块：07_集成学习 | 源文件：Bagging.py | 核心功能：Bootstrap 采样、并行集成、方差降低
 
@@ -27,7 +29,7 @@ bag.fit(X_train, y_train)
 - **随机森林** = Bagging + 随机特征选择
 - **Pasting**：不放回抽样的 Bagging
 - **Subagging**：只用部分样本的 Bagging
-﻿## 数学原理
+## 数学原理
 
 ### 1. Bootstrap 采样
 

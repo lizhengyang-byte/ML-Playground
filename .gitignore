@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# 虚拟环境
+.venv/
+
+# 数据下载缓存
+data/
+.cache/
+
+# 临时文件
+_tmp_math.md
+splice_math.py
+
+# IDE
+.vscode/
+.idea/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 模型产物
+*.pkl
+*.joblib
+*.onnx
+*.pt
+*.pth

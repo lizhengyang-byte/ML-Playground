@@ -1,4 +1,6 @@
-﻿# XGBoost：竞赛神器
+# XGBoost：竞赛神器
+> 难度标签：中级 | 预计时长：15-25分钟 | 前置知识：无学习经验
+
 
 > 所属模块：07_集成学习 | 源文件：XGBoost.py | 核心功能：梯度提升、正则化、特征重要性、早停
 
@@ -26,7 +28,7 @@ model.fit(X_train, y_train, eval_set=[(X_val, y_val)], early_stopping_rounds=10)
 - **XGBoost 1.0+**：支持原生分类特征
 - **DART**：在 XGBoost 中加入 Dropout
 - **XGBoost vs LightGBM**：后者通常更快，但 XGBoost 更稳定
-﻿## 数学原理
+## 数学原理
 
 ### 1. XGBoost 的目标函数
 

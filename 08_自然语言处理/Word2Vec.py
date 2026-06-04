@@ -1,5 +1,5 @@
 """
-Word2Vec —— 词向量模型，将词映射为稠密向量，捕捉语义关系
+Word2Vec —— 词向量模型,将词映射为稠密向量,捕捉语义关系
 需要安装: pip install gensim
 """
 import numpy as np
@@ -10,7 +10,10 @@ try:
     HAS_GENSIM = True
 except ImportError:
     HAS_GENSIM = False
-    print("gensim 未安装，请运行: pip install gensim\n")
+    print("[SKIP] gensim 未安装，跳过本示例")
+    import sys; sys.exit(0)
+    HAS_GENSIM = False
+    print("gensim 未安装,请运行: pip install gensim\n")
 
 if HAS_GENSIM:
     # ===================== 1. 训练语料 =====================
@@ -81,8 +84,8 @@ if HAS_GENSIM:
 
     # ===================== 6. 两种训练模式 =====================
     print("\n=== CBOW vs Skip-gram ===")
-    print("CBOW (sg=0): 用上下文预测中心词，速度快，适合高频词")
-    print("Skip-gram (sg=1): 用中心词预测上下文，适合低频词，语义更丰富")
+    print("CBOW (sg=0): 用上下文预测中心词,速度快,适合高频词")
+    print("Skip-gram (sg=1): 用中心词预测上下文,适合低频词,语义更丰富")
 
     # 训练 CBOW 对比
     model_cbow = Word2Vec(sentences, vector_size=50, window=3, sg=0, epochs=100, workers=1, seed=42)
@@ -105,7 +108,7 @@ if HAS_GENSIM:
             print(f"  window={win}: '学习'-'深度' 相似度={sim:.4f}")
 
 print("\n=== Word2Vec 要点 ===")
-print("- 分布式假设: 上下文相似的词，语义也相似")
+print("- 分布式假设: 上下文相似的词,语义也相似")
 print("- 词向量可以捕捉语义关系（类比推理）")
 print("- vector_size 通常 100~300（越大表达力越强但需更多数据）")
 print("- 预训练词向量: Google Word2Vec / GloVe / FastText")

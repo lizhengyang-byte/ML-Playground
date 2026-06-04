@@ -5,7 +5,7 @@
 import re
 
 print("=== 基于规则的 NER ===")
-text = "张三在北京大学工作，他毕业于清华大学，住在北京市海淀区。"
+text = "张三在北京大学工作,他毕业于清华大学,住在北京市海淀区。"
 print(f"文本: {text}")
 
 # 简单规则：匹配"XX大学"、"XX市"
@@ -24,7 +24,10 @@ try:
     HAS_TF = True
 except ImportError:
     HAS_TF = False
-    print("\ntransformers 未安装，跳过预训练模型 NER 演示")
+    print("[SKIP] transformers 未安装，跳过本示例")
+    import sys; sys.exit(0)
+    HAS_TF = False
+    print("\ntransformers 未安装,跳过预训练模型 NER 演示")
 
 if HAS_TF:
     # 使用中文 BERT NER 模型
@@ -95,11 +98,11 @@ print("  只要实体类型正确就算对（不要求边界完全匹配）")
 
 # ===================== 6. 常用 NER 工具和模型 =====================
 print("\n=== 常用 NER 工具 ===")
-print("1. spaCy: 工业级 NLP 工具，内置 NER")
+print("1. spaCy: 工业级 NLP 工具,内置 NER")
 print("   en_core_web_sm / zh_core_web_sm")
 print("2. Hugging Face Transformers:")
 print("   bert-base-chinese-finetuned-cluener")
-print("3. HanLP: 中文 NLP 工具包，NER 效果好")
+print("3. HanLP: 中文 NLP 工具包,NER 效果好")
 print("4. LAC (百度): 中文词法分析（分词+词性+NER）")
 
 print("\n=== NER 要点 ===")

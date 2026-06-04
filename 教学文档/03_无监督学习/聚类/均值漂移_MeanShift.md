@@ -1,4 +1,6 @@
-﻿# 均值漂移 Mean Shift：跟着密度峰值走
+# 均值漂移 Mean Shift：跟着密度峰值走
+> 难度标签：中级 | 预计时长：15-25分钟 | 前置知识：无学习经验
+
 
 > 所属模块：03_无监督学习/聚类 | 源文件：均值漂移_MeanShift.py | 核心功能：核密度估计聚类、bandwidth 自动估计、无需预设簇数
 
@@ -14,28 +16,28 @@
 
 ### bandwidth 自动估计
 
-`python
+```python
 bw_estimated = estimate_bandwidth(X, quantile=0.2, n_samples=200)
-`
+```
 
 bandwidth 是 Mean Shift 唯一的关键参数，控制核函数的"视野"大小。estimate_bandwidth 用分位数方法自动估计。quantile 越大，带宽越大，簇数越少。
 
 ### bin_seeding 加速
 
-`python
+```python
 ms = MeanShift(bandwidth=bw_estimated, bin_seeding=True)
-`
+```
 
 in_seeding=True 只在网格点上初始化漂移起点，大幅减少计算量（速度提升数倍），结果几乎不变。
 
 ## 使用示例
 
-`python
+```python
 from sklearn.cluster import MeanShift, estimate_bandwidth
 bw = estimate_bandwidth(X, quantile=0.2)
 ms = MeanShift(bandwidth=bw, bin_seeding=True)
 labels = ms.fit_predict(X)
-`
+```
 
 ## 注意事项
 
@@ -50,7 +52,7 @@ labels = ms.fit_predict(X)
 - **核密度估计（KDE）**：Mean Shift 的理论基础
 - **Mean Shift vs DBSCAN**：两者都能发现任意形状的簇，但原理不同
 - **并行 Mean Shift**：GPU 加速版本
-﻿## 数学原理
+## 数学原理
 
 ### 1. 核密度估计（KDE）
 

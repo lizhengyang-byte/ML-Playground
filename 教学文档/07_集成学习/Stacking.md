@@ -1,4 +1,6 @@
-﻿# Stacking：用元模型学习如何组合
+# Stacking：用元模型学习如何组合
+> 难度标签：中级 | 预计时长：15-25分钟 | 前置知识：无学习经验
+
 
 > 所属模块：07_集成学习 | 源文件：Stacking.py | 核心功能：两层集成、元学习器、交叉验证预测
 
@@ -29,7 +31,7 @@ stacking = StackingClassifier(
 - **多层 Stacking**：Stacking 的输出再做 Stacking
 - **Feature-weighted Stacking**：给不同特征组用不同基模型
 - **Netflix Prize**：冠军方案就是大规模 Stacking
-﻿## 数学原理
+## 数学原理
 
 ### 1. Stacking 的两层结构
 

@@ -1,4 +1,6 @@
-﻿# ARIMA：时间序列预测的经典模型
+# ARIMA：时间序列预测的经典模型
+> 难度标签：中级 | 预计时长：10-20分钟 | 前置知识：无学习经验
+
 
 > 所属模块：10_时间序列 | 源文件：ARIMA.py | 核心功能：平稳性检验、差分、自相关分析、statsmodels 实现
 
@@ -26,7 +28,7 @@ forecast = fitted.forecast(steps=10)
 - **SARIMA**：加入季节性
 - **ARIMA 的自动选择**：`pmdarima.auto_arima`
 - **Prophet**：Facebook 的时间序列工具，更易用
-﻿## 数学原理
+## 数学原理
 
 ### 1. ARIMA(p, d, q) 模型
 

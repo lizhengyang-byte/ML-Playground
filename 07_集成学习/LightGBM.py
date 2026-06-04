@@ -1,5 +1,5 @@
 """
-LightGBM —— 微软提出的高效梯度提升框架，基于直方图的决策树算法
+LightGBM —— 微软提出的高效梯度提升框架,基于直方图的决策树算法
 需要安装: pip install lightgbm
 """
 import numpy as np
@@ -12,7 +12,10 @@ try:
     HAS_LGB = True
 except ImportError:
     HAS_LGB = False
-    print("LightGBM 未安装，请运行: pip install lightgbm\n")
+    print("[SKIP] LightGBM 未安装，跳过本示例")
+    import sys; sys.exit(0)
+    HAS_LGB = False
+    print("LightGBM 未安装,请运行: pip install lightgbm\n")
 
 if HAS_LGB:
     # ===================== 1. 分类任务 =====================
@@ -47,9 +50,9 @@ if HAS_LGB:
 
     # ===================== 4. 关键参数 =====================
     print("\n=== 关键参数 ===")
-    print("num_leaves: 叶子数（核心参数），比 max_depth 控制更细")
+    print("num_leaves: 叶子数（核心参数）,比 max_depth 控制更细")
     print("max_depth: 树的最大深度（-1=不限）")
-    print("min_data_in_leaf: 叶节点最小样本数，防过拟合")
+    print("min_data_in_leaf: 叶节点最小样本数,防过拟合")
 
     # ===================== 5. num_leaves vs max_depth =====================
     print("\n=== num_leaves 对比 ===")
@@ -70,8 +73,8 @@ if HAS_LGB:
     # ===================== 7. LightGBM vs XGBoost =====================
     print("\n=== LightGBM vs XGBoost ===")
     print("Leaf-wise 生长: LightGBM 每次选增益最大的叶子分裂（非层级生长）")
-    print("直方图加速: 将连续值分桶，减少分裂点搜索时间")
-    print("单边梯度采样 (GOSS): 保留大梯度样本，随机采样小梯度样本")
+    print("直方图加速: 将连续值分桶,减少分裂点搜索时间")
+    print("单边梯度采样 (GOSS): 保留大梯度样本,随机采样小梯度样本")
     print("互斥特征捆绑 (EFB): 将互斥稀疏特征合并")
 
 print("\n=== LightGBM 要点 ===")

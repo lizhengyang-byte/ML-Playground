@@ -1,4 +1,6 @@
-﻿# LightGBM：大规模梯度提升的利器
+# LightGBM：大规模梯度提升的利器
+> 难度标签：中级 | 预计时长：15-25分钟 | 前置知识：无学习经验
+
 
 > 所属模块：07_集成学习 | 源文件：LightGBM.py | 核心功能：直方图算法、Leaf-wise 生长、类别特征支持
 
@@ -27,7 +29,7 @@ model.fit(X_train, y_train, eval_set=[(X_val, y_val)], callbacks=[lgb.early_stop
 - **GOSS**：优先保留梯度大的样本
 - **EFB**：将互斥特征捆绑，减少特征数
 - **Dask-LightGBM**：分布式训练
-﻿## 数学原理
+## 数学原理
 
 ### 1. LightGBM 的核心创新
 

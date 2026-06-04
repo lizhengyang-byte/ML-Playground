@@ -1,4 +1,6 @@
-﻿# SVM 分类：最大间隔的优雅分类器
+# SVM 分类：最大间隔的优雅分类器
+> 难度标签：初级 | 预计时长：15-25分钟 | 前置知识：无学习经验
+
 
 > 所属模块：02_监督学习/分类 | 源文件：SVM_分类.py | 核心功能：4 种核函数对比、C/gamma 调参、多分类支持
 
@@ -24,9 +26,9 @@
 
 ### 核函数选择
 
-`python
+```python
 kernels = ["linear", "poly", "rbf", "sigmoid"]
-`
+```
 
 - **linear**：线性核，适合高维数据（特征数 > 样本数）或线性可分数据
 - **poly**：多项式核，捕获多项式交互特征
@@ -35,25 +37,25 @@ kernels = ["linear", "poly", "rbf", "sigmoid"]
 
 ### C 参数——间隔与误分类的平衡
 
-`python
+```python
 for C in [0.01, 0.1, 1.0, 10.0, 100.0]:
     svm_c = SVC(kernel="linear", C=C, random_state=42)
-`
+```
 
 C 越大，对误分类的惩罚越重，间隔越窄（硬间隔），容易过拟合。C 越小，允许更多误分类，间隔越宽（软间隔），泛化更好。
 
 ### gamma 参数——RBF 核的"视野"
 
-`python
+```python
 for gamma in ["scale", "auto", 0.01, 0.1, 1.0, 10.0]:
     svm_g = SVC(kernel="rbf", C=10.0, gamma=gamma, random_state=42)
-`
+```
 
 gamma 控制单个训练样本的"影响范围"。gamma 越大，影响范围越小，决策边界越弯曲（过拟合）。gamma 越小，影响范围越大，边界越平滑（欠拟合）。
 
 ## 使用示例
 
-`python
+```python
 from sklearn.svm import SVC
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
@@ -64,7 +66,7 @@ pipe = Pipeline([
 ])
 pipe.fit(X_train, y_train)
 print(pipe.predict_proba(X_test))
-`
+```
 
 ## 注意事项
 
@@ -81,7 +83,7 @@ print(pipe.predict_proba(X_test))
 - **SVM 的几何直觉**：间隔最大化等价于在约束下最小化权重范数 ||w||²，这是一个凸优化问题
 - **SVM 与神经网络的关系**：使用 RBF 核的 SVM 可以看作一个单隐层 RBF 网络
 
-﻿## 数学原理
+## 数学原理
 
 ### 1. 硬间隔 SVM 的优化问题
 

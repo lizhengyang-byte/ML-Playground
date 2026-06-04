@@ -1,4 +1,6 @@
-﻿# PPO：最流行的策略梯度算法
+# PPO：最流行的策略梯度算法
+> 难度标签：高级 | 预计时长：20-30分钟 | 前置知识：无学习经验
+
 
 > 所属模块：05_强化学习 | 源文件：PPO.py | 核心功能：裁剪机制、GAE 优势估计、多 epoch 更新、OpenAI 标准实现
 
@@ -14,33 +16,33 @@ PPO（Proximal Policy Optimization）是 OpenAI 2017 年提出的策略梯度算
 
 ### 裁剪目标
 
-`python
+```python
 ratio = torch.exp(new_log_probs - old_log_probs)
 clipped_ratio = torch.clamp(ratio, 1 - clip_epsilon, 1 + clip_epsilon)
 actor_loss = -torch.min(ratio * advantages, clipped_ratio * advantages).mean()
-`
+```
 
 取 min 意味着：当策略变化方向正确时（A>0），最多让概率增加 epsilon 倍；方向错误时（A<0），最多让概率减少 epsilon 倍。
 
 ### GAE 优势估计
 
-`python
+```python
 delta = reward + gamma * V(next_state) - V(state)
 gae = delta + gamma * lambda * gae
-`
+```
 
 GAE 通过 lambda 参数平衡偏差和方差。lambda=0 退化为 TD，lambda=1 退化为蒙特卡洛。
 
 ## 使用示例
 
-`python
+```python
 agent = PPOAgent()
 # 收集经验
 for step in range(update_every):
     action, log_prob, value = agent.model.get_action(state)
 # 更新
 agent.update(states, actions, old_log_probs, returns, advantages)
-`
+```
 
 ## 注意事项
 
@@ -55,7 +57,7 @@ agent.update(states, actions, old_log_probs, returns, advantages)
 - **PPO-Clip vs PPO-Penalty**：两种 PPO 变体
 - **分布式 PPO**：如 IMPALA、Distributed PPO
 - **Mamba 等替代方案**：状态空间模型能否替代 Transformer+PPO
-﻿## 数学原理
+## 数学原理
 
 ### 1. 重要性采样与策略比
 

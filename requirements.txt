@@ -1,0 +1,40 @@
+# === 核心依赖 ===
+numpy>=2.0
+scipy>=1.14
+pandas>=2.2
+scikit-learn>=1.5
+matplotlib>=3.9
+seaborn>=0.13
+statsmodels>=0.14
+
+# === 深度学习 ===
+torch>=2.4
+torchvision>=0.19
+
+# === 自然语言处理 ===
+transformers>=4.40
+gensim>=4.3
+jieba>=0.42
+
+# === 集成学习（可选）===
+xgboost>=2.0
+lightgbm>=4.3
+catboost>=1.2
+
+# === 时间序列 ===
+prophet>=1.1
+
+# === 模型解释（可选）===
+shap>=0.45
+
+# === 强化学习（可选）===
+gymnasium>=0.29
+
+# === 模型导出（可选）===
+onnxruntime>=1.18
+skl2onnx>=1.17
+
+# === 工具 ===
+joblib>=1.4
+pillow>=10.0
+tqdm>=4.66

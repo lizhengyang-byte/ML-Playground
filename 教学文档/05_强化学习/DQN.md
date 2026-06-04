@@ -1,4 +1,6 @@
-﻿# DQN：深度 Q 网络——从 Q 表到神经网络的跨越
+# DQN：深度 Q 网络——从 Q 表到神经网络的跨越
+> 难度标签：高级 | 预计时长：20-30分钟 | 前置知识：无学习经验
+
 
 > 所属模块：05_强化学习 | 源文件：DQN.py | 核心功能：经验回放、目标网络、epsilon 衰减、PyTorch 实现
 
@@ -16,29 +18,29 @@ Q-Learning 的 Q 表在连续状态空间中不可行（状态数无穷多），
 
 **经验回放**：打破时间相关性，让数据可以复用。
 
-`python
+```python
 buffer.push(state, action, reward, next_state, done)
 batch = buffer.sample(batch_size)  # 随机采样一批经验
-`
+```
 
 **目标网络**：冻结目标 Q 值，防止训练振荡。
 
-`python
+```python
 target = rewards + gamma * target_net(next_states).max(dim=1)[0] * (1 - dones)
 # 每隔 target_update 步同步一次
 target_net.load_state_dict(q_net.state_dict())
-`
+```
 
 ### 损失函数
 
-`python
+```python
 q_values = q_net(states).gather(1, actions)
 loss = MSELoss(q_values, target)
-`
+```
 
 ## 使用示例
 
-`python
+```python
 agent = DQNAgent(state_dim=4, action_dim=2)
 for episode in range(n_episodes):
     state = env.reset()
@@ -48,7 +50,7 @@ for episode in range(n_episodes):
         agent.buffer.push(state, action, reward, next_state, done)
         agent.update()
         state = next_state
-`
+```
 
 ## 注意事项
 
@@ -63,7 +65,7 @@ for episode in range(n_episodes):
 - **Dueling DQN**：将 Q 值分解为 V(s) + A(s,a)
 - **Prioritized Experience Replay**：优先采样 TD 误差大的经验
 - **Rainbow DQN**：融合多种 DQN 变体的集大成者
-﻿## 数学原理
+## 数学原理
 
 ### 1. DQN 的核心思想
 

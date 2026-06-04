@@ -1,5 +1,5 @@
 """
-XGBoost —— 极端梯度提升，高效、正则化的 Boosting 实现，竞赛常胜算法
+XGBoost —— 极端梯度提升,高效、正则化的 Boosting 实现,竞赛常胜算法
 需要安装: pip install xgboost
 """
 import numpy as np
@@ -12,7 +12,10 @@ try:
     HAS_XGB = True
 except ImportError:
     HAS_XGB = False
-    print("XGBoost 未安装，请运行: pip install xgboost\n")
+    print("[SKIP] XGBoost 未安装，跳过本示例")
+    import sys; sys.exit(0)
+    HAS_XGB = False
+    print("XGBoost 未安装,请运行: pip install xgboost\n")
 
 # ===================== 1. 分类任务 =====================
 if HAS_XGB:
@@ -83,12 +86,12 @@ if HAS_XGB:
 
 # ===================== 7. XGBoost 核心特性 =====================
 print("\n=== XGBoost 核心特性 ===")
-print("1. 正则化: 目标函数包含 L1/L2 正则项，防止过拟合")
-print("2. 二阶泰勒展开: 同时利用一阶梯度和二阶梯度（Hessian），优化更精确")
+print("1. 正则化: 目标函数包含 L1/L2 正则项,防止过拟合")
+print("2. 二阶泰勒展开: 同时利用一阶梯度和二阶梯度（Hessian）,优化更精确")
 print("3. 列采样: 每棵树随机选择部分特征（类似随机森林）")
 print("4. 缺失值处理: 自动学习缺失值的最优分裂方向")
 print("5. 并行化: 特征级别并行（不是树级别）")
-print("6. 缓存感知: 按列块组织数据，优化 CPU 缓存命中率")
+print("6. 缓存感知: 按列块组织数据,优化 CPU 缓存命中率")
 
 print("\n=== XGBoost vs sklearn GradientBoosting ===")
 print("- XGBoost 更快（C++ 实现 + 并行化）")
@@ -97,7 +100,7 @@ print("- XGBoost 支持缺失值处理")
 print("- XGBoost 有 early_stopping 和自定义评估指标")
 
 print("\n=== XGBoost 要点 ===")
-print("- max_depth: 通常 3~10，越大越容易过拟合")
-print("- learning_rate: 通常 0.01~0.3，与 n_estimators 互补")
+print("- max_depth: 通常 3~10,越大越容易过拟合")
+print("- learning_rate: 通常 0.01~0.3,与 n_estimators 互补")
 print("- subsample / colsample_bytree: 引入随机性防过拟合")
 print("- min_child_weight: 控制叶节点最小样本权重")

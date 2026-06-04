@@ -128,7 +128,7 @@ print()
 print("效果差异:")
 print("- Q-Learning 学到的是最优策略（冒险走捷径）")
 print("- SARSA 学到的是更保守的策略（避开陷阱附近路径）")
-print("- 因为 SARSA 在训练中"执行"了探索动作，更考虑探索风险")
+print('- 因为 SARSA 在训练中"执行"了探索动作，更考虑探索风险')
 
 print("\n=== SARSA 要点 ===")
 print("- On-policy：行为策略 = 目标策略（都是 ε-greedy）")

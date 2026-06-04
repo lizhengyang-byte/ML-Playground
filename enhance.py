@@ -1,5 +1,5 @@
-﻿import os
-base = r'C:\Users\30353\Desktop\machine_learning\教学文档'
+import os
+base = os.path.join(os.path.dirname(os.path.abspath(__file__)), '教学文档')
 m = {}
 
 m['08_自然语言处理/文本预处理.md'] = """

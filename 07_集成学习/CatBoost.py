@@ -1,5 +1,5 @@
 """
-CatBoost —— Yandex 提出的梯度提升框架，原生支持类别特征，抗过拟合能力强
+CatBoost —— Yandex 提出的梯度提升框架,原生支持类别特征,抗过拟合能力强
 需要安装: pip install catboost
 """
 import numpy as np
@@ -13,7 +13,10 @@ try:
     HAS_CB = True
 except ImportError:
     HAS_CB = False
-    print("CatBoost 未安装，请运行: pip install catboost\n")
+    print("[SKIP] CatBoost 未安装，跳过本示例")
+    import sys; sys.exit(0)
+    HAS_CB = False
+    print("CatBoost 未安装,请运行: pip install catboost\n")
 
 if HAS_CB:
     # ===================== 1. 分类任务 =====================
@@ -84,7 +87,7 @@ if HAS_CB:
 
 print("\n=== CatBoost 要点 ===")
 print("- 原生类别特征支持（无需手动编码）")
-print("- Ordered Boosting: 防止 target leakage，抗过拟合能力强")
+print("- Ordered Boosting: 防止 target leakage,抗过拟合能力强")
 print("- 默认参数通常就能取得很好的效果（调参需求低）")
 print("- 对缺失值和类别特征的处理是内置的")
 print("- 训练速度介于 XGBoost 和 LightGBM 之间")

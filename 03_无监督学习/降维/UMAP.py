@@ -9,13 +9,16 @@ from sklearn.decomposition import PCA
 from sklearn.model_selection import cross_val_score
 from sklearn.neighbors import KNeighborsClassifier
 
-# 尝试导入 umap，不可用则跳过
+# 尝试导入 umap,不可用则跳过
 try:
     import umap
     HAS_UMAP = True
 except ImportError:
     HAS_UMAP = False
-    print("UMAP 未安装，请运行: pip install umap-learn")
+    print("[SKIP] UMAP 未安装，跳过本示例")
+    import sys; sys.exit(0)
+    HAS_UMAP = False
+    print("UMAP 未安装,请运行: pip install umap-learn")
     print("以下演示仅展示 UMAP 的使用方式和参数说明\n")
 
 # ===================== 1. 加载数据 =====================
@@ -84,14 +87,14 @@ if HAS_UMAP:
 # ===================== 8. 参数说明（即使未安装也展示）=====================
 print("\n=== UMAP 参数说明 ===")
 print("- n_components: 目标维度（通常 2 或 3）")
-print("- n_neighbors: 邻域大小，越大越关注全局结构（默认 15）")
-print("- min_dist: 簇内点的最小距离，越小簇越紧凑（默认 0.1）")
+print("- n_neighbors: 邻域大小,越大越关注全局结构（默认 15）")
+print("- min_dist: 簇内点的最小距离,越小簇越紧凑（默认 0.1）")
 print("- metric: 距离度量（euclidean, cosine, manhattan 等）")
-print("- random_state: 随机种子，保证可复现")
+print("- random_state: 随机种子,保证可复现")
 print()
 print("=== UMAP 要点 ===")
-print("- 比 t-SNE 快得多，适合大数据集")
+print("- 比 t-SNE 快得多,适合大数据集")
 print("- 比 t-SNE 更好地保持全局结构")
-print("- 可以用于特征工程（不只是可视化），因为支持 transform")
+print("- 可以用于特征工程（不只是可视化）,因为支持 transform")
 print("- 支持监督和半监督降维（transform_supervised）")
 print("- 学术上比 t-SNE 更有理论支撑（基于黎曼几何和代数拓扑）")

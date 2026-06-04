@@ -1,4 +1,6 @@
-﻿# Prophet：Facebook 的时间序列利器
+# Prophet：Facebook 的时间序列利器
+> 难度标签：中级 | 预计时长：10-20分钟 | 前置知识：无学习经验
+
 
 > 所属模块：10_时间序列 | 源文件：Prophet.py | 核心功能：趋势+季节+节假日分解、自动预测
 
@@ -27,7 +29,7 @@ forecast = m.predict(future)
 - **NeuralProphet**：Prophet 的深度学习版本
 - **自动时间序列**：AutoTS、AutoGluon-TimeSeries
 - **时序大模型**：TimesFM、Chronos 等基础模型
-﻿## 数学原理
+## 数学原理
 
 ### 1. Prophet 的分解模型
 

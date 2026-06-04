@@ -1,7 +1,7 @@
 """
 模型可解释性 (Model Interpretability)
 
-理解模型"为什么"做出某个预测，是信任和调试模型的关键：
+理解模型"为什么"做出某个预测,是信任和调试模型的关键：
 1. 特征重要性（树模型）
 2. 排列重要性（模型无关）
 3. 部分依赖分析
@@ -137,7 +137,7 @@ print("=" * 60)
 
 def simple_lime(model, X_train, instance, n_samples=500, feature_names=None):
     """
-    简化版LIME: 在实例附近采样，用采样数据训练线性模型来近似解释
+    简化版LIME: 在实例附近采样,用采样数据训练线性模型来近似解释
     """
     # 在实例附近生成扰动样本
     noise = np.random.randn(n_samples, X_train.shape[1]) * 0.1
@@ -187,6 +187,9 @@ try:
     HAS_SHAP = True
 except ImportError:
     HAS_SHAP = False
+    print("[SKIP] shap 未安装，跳过本示例")
+    import sys; sys.exit(0)
+    HAS_SHAP = False
     print("shap 未安装, 使用简化实现")
     print("安装: pip install shap")
 
@@ -197,7 +200,7 @@ if HAS_SHAP:
 
     print("\nSHAP值 (前5个测试样本):")
     if isinstance(shap_values, list):
-        # 多分类: shap_values是列表，每个元素对应一个类别
+        # 多分类: shap_values是列表,每个元素对应一个类别
         for sample_idx in range(min(3, len(X_test))):
             print(f"\n  样本{sample_idx+1}:")
             for c in range(len(shap_values)):
